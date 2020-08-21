@@ -4,7 +4,7 @@ export const Politician = politician => {
   return `
     <section class="politician">
       <header class="politician__name">
-          <h2>${name.first} ${name.last}</h2>
+          <h3>${name.first} ${name.last}</h3>
       </header>
       <div class="politician__info">
           <div>Age: ${age}</div>

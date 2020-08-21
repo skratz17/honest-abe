@@ -15,6 +15,7 @@ export const PoliticianList = () => {
 
 const render = () => {
   contentTarget.innerHTML = `
+    <h2>Politicians</h2>
     <article class="politician-list">
       ${ politicians.map(Politician).join('') }
     </article>
