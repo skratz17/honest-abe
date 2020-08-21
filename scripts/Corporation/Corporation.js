@@ -4,7 +4,7 @@ export const Corporation = corporation => {
   return `
     <section class="corporation">
       <header class="corporation__name">
-          <h1>${company}</h1>
+          <h3>${company}</h3>
       </header>
       <div class="corporation__info">
           <div>${address}</div>
