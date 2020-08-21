@@ -1,5 +1,7 @@
+import { moneyFormatter } from '../utilities/moneyFormatter.js';
+
 export const Pac = pac => {
-  const { registeredName, address } = pac;
+  const { registeredName, address, donors } = pac;
 
   return `
     <section class="pac">
@@ -12,7 +14,7 @@ export const Pac = pac => {
       <div class="pac__donors">
           <h4>Donors</h4>
           <ul>
-            <!-- map here -->
+            ${ donors.map(donor => `<li>${donor.company} (${moneyFormatter.format(donor.amount)})</li>`).join('') }
           </ul>
       </div>
     </section>
