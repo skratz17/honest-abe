@@ -1,7 +1,7 @@
 import { moneyFormatter } from '../utilities/moneyFormatter.js';
 
 export const Politician = politician => {
-  const { name, age, district, donors, legislations } = politician;
+  const { name, age, district, donors, legislations, corporations } = politician;
 
   return `
     <section class="card politician">
@@ -22,6 +22,12 @@ export const Politician = politician => {
         <h4>PAC Donations</h4>
         <ul class="info-list">
           ${ donors.map(donor => `<li>${donor.registeredName} (${moneyFormatter.format(donor.amount)})</li>`).join('') || 'NONE. This guy is squeaky clean.'}
+        </ul>
+      </div>
+      <div class="politician__influencers">
+        <h4>Influencing Corporations</h4>
+        <ul class="info-list">
+          ${ corporations.map(corporation => `<li>${corporation.company}</l1>`).join('') || 'NONE. Clean as a whistle.' }
         </ul>
       </div>
     </section>
