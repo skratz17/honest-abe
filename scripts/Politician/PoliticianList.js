@@ -5,6 +5,9 @@ import { getPacDonations, usePacDonations } from '../Donation/PacDonationsProvid
 import { getLegislations, useLegislations } from '../Legislation/LegislationProvider.js';
 import { getPoliticianLegislations, usePoliticianLegislations } from '../Legislation/PoliticianLegislationProvider.js';
 import { getInterests, useInterests } from '../Legislation/InterestProvider.js';
+import { getCorporations, useCorporations } from '../Corporation/CorporationProvider.js';
+import { getCorporateInterests, useCorporateInterests } from '../Corporation/CorporateInterestProvider.js';
+import { getCorporateDonations, useCorporateDonations } from '../Donation/CorporateDonationsProvider.js';
 
 const contentTarget = document.querySelector('.politician-list-container');
 
@@ -14,9 +17,14 @@ let pacDonations = [];
 let legislations = [];
 let politicianLegislations = [];
 let interests = [];
+let corporations = [];
+let corporateInterests = [];
+let corporateDonations = [];
+
+let expandedCorporations = [];
 
 export const PoliticianList = () => {
-  Promise.all([ getPoliticians(), getPacs(), getPacDonations(), getLegislations(), getPoliticianLegislations(), getInterests() ])
+  Promise.all([ getPoliticians(), getPacs(), getPacDonations(), getLegislations(), getPoliticianLegislations(), getInterests(), getCorporations(), getCorporateInterests(), getCorporateDonations() ])
     .then(() => {
       politicians = usePoliticians();
       pacs = usePacs();
@@ -24,6 +32,12 @@ export const PoliticianList = () => {
       legislations = useLegislations();
       politicianLegislations = usePoliticianLegislations();
       interests = useInterests();
+      corporations = useCorporations();
+      corporateInterests = useCorporateInterests();
+      corporateDonations = useCorporateDonations();
+
+      attachExtraPropertiesToCorporations();
+
       render();
     });
 };
@@ -39,11 +53,31 @@ const render = () => {
   `;
 };
 
+const attachExtraPropertiesToCorporations = () => {
+  corporations.forEach(corporation => {
+    corporation.pacsDonatedTo = getPacsDonatedToForCorporation(corporation);
+    corporation.interests = getInterestsForCorporation(corporation);
+  });
+};
+
 const attachExtraPropertiesToPoliticians = () => {
   politicians.forEach(politician => {
     politician.donors = getDonorsForPolitician(politician);
     politician.legislations = getLegislationsForPolitician(politician);
+    politician.corporations = getInfluencingCorporationsForPolitician(politician);
   });
+};
+
+const getPacsDonatedToForCorporation = corporation => {
+  return corporateDonations
+    .filter(corporateDonation => corporateDonation.corporationId === corporation.id)
+    .map(corporateDonation => corporateDonation.pacId);
+};
+
+const getInterestsForCorporation = corporation => {
+  return corporateInterests
+    .filter(corporateInterest => corporateInterest.corporationId === corporation.id)
+    .map(corporateInterest => corporateInterest.interestId);
 };
 
 const getDonorsForPolitician = politician => {
@@ -64,4 +98,13 @@ const getLegislationsForPolitician = politician => {
 
 const getInterestForLegislation = legislation => {
   return interests.find(interest => interest.id === legislation.interestId);
+};
+
+const getInfluencingCorporationsForPolitician = politician => {
+  const politicianInterests = new Set(politician.legislations.map(legislation => legislation.interestId));
+  const pacsDonatingToPolitician = new Set(politician.donors.map(donor => donor.id));
+
+  return corporations
+    .filter(corporation => corporation.interests.some(interestId => politicianInterests.has(interestId)))
+    .filter(corporation => corporation.pacsDonatedTo.some(pacId => pacsDonatingToPolitician.has(pacId)));
 };
