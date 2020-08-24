@@ -23,8 +23,8 @@ const render = () => {
   attachDonorsToPoliticians();
 
   contentTarget.innerHTML = `
-    <h2>Politicians</h2>
-    <article class="politician-list">
+    <h2 class="list__header">Politicians</h2>
+    <article class="list politician-list">
       ${ politicians.map(Politician).join('') }
     </article>
   `;

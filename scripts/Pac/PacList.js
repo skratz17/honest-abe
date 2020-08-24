@@ -23,8 +23,8 @@ const render = () => {
   attachDonorsToPacs();
 
   contentTarget.innerHTML = `
-    <h2>PACs</h2>
-    <article class="pac-list">
+    <h2 class="list__header">PACs</h2>
+    <article class="list pac-list">
       ${ pacs.map(Pac).join('') }
     </article>
   `;
