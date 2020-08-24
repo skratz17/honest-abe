@@ -15,8 +15,8 @@ export const CorporationList = () => {
 
 const render = () => {
   contentTarget.innerHTML = `
-    <h2>Politicians</h2>
-    <article class="politician-list">
+    <h2 class="list__header">Corporations</h2>
+    <article class="list corporation-list">
       ${ corporations.map(Corporation).join('') }
     </article>
   `;
