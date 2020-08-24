@@ -11,9 +11,9 @@ export const Pac = pac => {
       <div class="pac__info">
           <div>${address}</div>
       </div>
-      <div class="donors-list-wrapper pac__donors">
+      <div class="info-list-wrapper pac__donors">
           <h4>Corporate Donors</h4>
-          <ul class="donors-list">
+          <ul class="info-list">
             ${ donors.map(donor => `<li>${donor.company} (${moneyFormatter.format(donor.amount)})</li>`).join('') || 'NONE. This PAC is squeaky clean.'}
           </ul>
       </div>
